@@ -16,7 +16,7 @@ let arrValues = [
 ];
 
 // Генерируемые значения
-let generatedValues = [2, 2, 2, 2, 4];
+let generatedValues = [2];
 
 // Управление
 document.addEventListener('keydown', keyDownHandler, false);
@@ -60,7 +60,6 @@ $start.addEventListener('click', startGame);
 function startGame() {
    display($start, none);
    display($gameField, flex);
-   // renderItems();   
    renderFirstItems();
 }
 
@@ -77,54 +76,24 @@ function renderFirstItems() {
          gameItem.classList.add('game__item--active');
          // gameItem.classList.add('game__item--2');
          i++;
-      }
-
-      // document.querySelector(`.game__item:nth-child(${1})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${1})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${2})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${2})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${3})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${3})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${4})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${4})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${5})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${5})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${6})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${6})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${7})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${7})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${8})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${8})`).classList.add('game__item--active');
-
-      // document.querySelector(`.game__item:nth-child(${9})`).innerHTML = 2;
-      // document.querySelector(`.game__item:nth-child(${9})`).classList.add('game__item--active');
-      // i++;     
+      }      
    }
-
    fillTheArray();
-   // for (let i = 0; i < arrValues.length; i++) {
-   //    console.log('Значения: ', arrValues[i]);
-   // }
 }
 
 function renderItems() {
+   let renderCount = 0;
    for (let i = 0; i <= 9; i++) {
       let gameItemNumber = getRandom(1, 9);
       let gameItem = document.querySelector(`.game__item:nth-child(${gameItemNumber})`);
       if (gameItem.innerHTML === '') {
-         // gameItem.innerHTML = 2;
          gameItem.innerHTML = generatedValues[Math.floor(Math.random() * generatedValues.length)];
          gameItem.classList.add('game__item--active');
+         renderCount++;
          break;
-      }
+      } 
    }
+   isRender = (renderCount === 0) ? false : true
    fillTheArray();
 }
 
@@ -261,6 +230,7 @@ function shiftValuesUp() {
 }
 
 function shiftRowsUp() {
+   
    // Сдвигаем ячейки на одну строку вверх
    // Обрабатываем только вторую и третью линию, т.к. только их возможно сместить наверх
    for (let i = 9; i >= 4; i--) {
