@@ -76,14 +76,17 @@
       &--active {
          background: #5fd1a2;
       }
+      &--disable {
+         background: #c8ecca;
+      }
       &--2 {
          background: #5fd1a2;
       }
       &--4 {
-         background: red;
+         background: #5fd1a2;
       }
       &--8 {
-         background: blue;
+         background: #5fd1a2;
       }
    }
 }

@@ -110,6 +110,8 @@ function fillTheArray() {
   for (var i = 0; i < 9; i++) {
     arrValues[i] = Number(document.querySelector(".game__item:nth-child(".concat(i + 1, ")")).innerHTML);
   }
+
+  paintingCell();
 }
 
 function shiftUp() {
@@ -585,17 +587,63 @@ function shiftColumnsRight() {
   }
 
   shiftValuesRight();
-} // function paintingCell(gameItem) {
-//       switch(gameItem.innerHTML) {
-//          case '4':
-//             gameItem.style.backgroundColor = '#FF0000';
-//             break;
-//          case '8':
-//             gameItem.style.backgroundColor = '#00FF00';
-//             break;
-//       }
-// }
+}
 
+function paintingCell() {
+  for (var i = 1; i <= 9; i++) {
+    var gameItem = document.querySelector(".game__item:nth-child(".concat(i, ")"));
+
+    switch (gameItem.innerHTML) {
+      case '':
+        gameItem.style.backgroundColor = '#c8ecca';
+        break;
+
+      case '2':
+        gameItem.style.backgroundColor = '#5fd1a2';
+        break;
+
+      case '4':
+        gameItem.style.backgroundColor = '#ebcccc';
+        break;
+
+      case '8':
+        gameItem.style.backgroundColor = '#cfacac';
+        break;
+
+      case '16':
+        gameItem.style.backgroundColor = '#b38989';
+        break;
+
+      case '32':
+        gameItem.style.backgroundColor = '#6e4c4c';
+        break;
+
+      case '64':
+        gameItem.style.backgroundColor = '#442c2c';
+        break;
+
+      case '128':
+        gameItem.style.backgroundColor = '#a1a3be';
+        break;
+
+      case '256':
+        gameItem.style.backgroundColor = '#70728f';
+        break;
+
+      case '512':
+        gameItem.style.backgroundColor = '#4f5170';
+        break;
+
+      case '1024':
+        gameItem.style.backgroundColor = '#2a2b44';
+        break;
+
+      case '2018':
+        gameItem.style.backgroundColor = '#090a0f';
+        break;
+    }
+  }
+}
 
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);

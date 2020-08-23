@@ -178,14 +178,18 @@ h1, h2, h3, h4, h5, h6 {
   background: #5fd1a2;
 }
 
+.game__item--disable {
+  background: #c8ecca;
+}
+
 .game__item--2 {
   background: #5fd1a2;
 }
 
 .game__item--4 {
-  background: red;
+  background: #5fd1a2;
 }
 
 .game__item--8 {
-  background: blue;
+  background: #5fd1a2;
 }
