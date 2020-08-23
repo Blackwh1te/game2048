@@ -175,5 +175,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .game__item--active {
-  background: #5bdfa8;
+  background: #5fd1a2;
+}
+
+.game__item--2 {
+  background: #5fd1a2;
+}
+
+.game__item--4 {
+  background: red;
+}
+
+.game__item--8 {
+  background: blue;
 }
