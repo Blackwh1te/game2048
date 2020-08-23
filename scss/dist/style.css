@@ -149,6 +149,7 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 50px;
+  transition: all 0.5s;
 }
 .game__rules {
   width: 300px;

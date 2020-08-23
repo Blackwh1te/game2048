@@ -186,6 +186,8 @@ body {
       -ms-flex-align: center;
           align-items: center;
   font-size: 50px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
 }
 
 .game__rules {
