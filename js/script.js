@@ -3,6 +3,7 @@ let $gameField = document.querySelector('#game-field');
 let none = 'none';
 let flex = 'flex';
 let score = 0;
+let isShiftPossible = true;
 let arrValues = [
    '',
    '',
@@ -12,44 +13,41 @@ let arrValues = [
    '',
    '',
    '',
-   '',
+   ''
 ];
 
-// Генерируемые значения
+// Значение генерируемых ячеек 
+// (в оригинальной игре на поле 4х4
+// помимо ячейки "2" может появиться
+// ячейка "4"),
+// но на поле 3х3 появление числа "4" сильно упрощает игру
+// поэтому массив генерируемых значений состоит только из значения "2"
 let generatedValues = [2];
 
-// Управление
+// Добавление орбаботчика событий при нажатии на стрелки клавиатуры
 document.addEventListener('keydown', keyDownHandler, false);
 
 function keyDownHandler(e) {
    // up
    if(e.keyCode == 38) {
-      rightPressed = true;
-      console.log('up');
       shiftUp();
       renderItems();
    }
 
    // down
    else if(e.keyCode == 40) {
-      leftPressed = true;
-      console.log('down');
       shiftDown();
       renderItems();
    }
    
    // left
    else if(e.keyCode == 37) {
-      leftPressed = true;
-      console.log('left');
       shiftLeft();
       renderItems();
    }
    
    // right
    else if(e.keyCode == 39) {
-      leftPressed = true;
-      console.log('right');
       shiftRight();
       renderItems();
    }
@@ -67,14 +65,14 @@ function display($el, displayType) {
    $el.style.display = displayType;
 }
 
+// Генерация двух первоначальных ячеек со значениями "2"
 function renderFirstItems() {
    for (let i = 0; i <= 1;) {
       let gameItemNumber = getRandom(1, 9);
       let gameItem = document.querySelector(`.game__item:nth-child(${gameItemNumber})`);
       if (gameItem.innerHTML === '') {
          gameItem.innerHTML = 2;
-         gameItem.classList.add('game__item--active');
-         // gameItem.classList.add('game__item--2');
+         gameItem.classList.add('game__item--2');
          i++;
       }      
    }
@@ -82,18 +80,16 @@ function renderFirstItems() {
 }
 
 function renderItems() {
-   let renderCount = 0;
    for (let i = 0; i <= 9; i++) {
       let gameItemNumber = getRandom(1, 9);
       let gameItem = document.querySelector(`.game__item:nth-child(${gameItemNumber})`);
       if (gameItem.innerHTML === '') {
          gameItem.innerHTML = generatedValues[Math.floor(Math.random() * generatedValues.length)];
-         gameItem.classList.add('game__item--active');
-         renderCount++;
+         gameItem.classList.add('game__item--2');
+
          break;
       } 
    }
-   isRender = (renderCount === 0) ? false : true
    fillTheArray();
 }
 
@@ -102,6 +98,7 @@ function fillTheArray() {
    for (let i = 0; i < 9; i++) {
       arrValues[i] = Number(document.querySelector(`.game__item:nth-child(${i + 1})`).innerHTML);
    }
+   // Окрашивание ячеек со значениями соответствующими цветами
    paintingCell();
 }
 
@@ -157,9 +154,8 @@ function shiftValuesUp() {
             // Обнуляем значение ячейки со второй линии и записываем результат в массив значений
             arrValues[i - 1 + 3] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i + 3})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i + 3})`).classList.remove('game__item--active');
             
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -168,11 +164,7 @@ function shiftValuesUp() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 
@@ -195,9 +187,8 @@ function shiftValuesUp() {
             // Обнуляем значение ячейки со третьей линии и записываем результат в массив значений
             arrValues[i - 1 + 3] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i + 3})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i + 3})`).classList.remove('game__item--active');
             
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -205,11 +196,7 @@ function shiftValuesUp() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 
@@ -224,7 +211,6 @@ function shiftValuesUp() {
          // Записываем значение ячейки в массив значений
          // Индекс уменьшаем на 1 для удобства, чтобы 1-ая ячейка была под №1, 2-ая под №2 и т.д.
          arrValues[i - 1] = gameItemValue;
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 }
@@ -247,18 +233,18 @@ function shiftRowsUp() {
 
             // Записываем значение текущей ячейки в массив значений (на строку выше)
             arrValues[i - 1 - 3] = gameItemValue;            
-            // Записываем значение текущей ячейки в ячейку на строке выше и добавляем класс --active
+            // Записываем значение текущей ячейки в ячейку на строке выше
             document.querySelector(`.game__item:nth-child(${i - 3})`).innerHTML = gameItemValue;
-            document.querySelector(`.game__item:nth-child(${i - 3})`).classList.add('game__item--active');
 
             // Обнуляем значение текущей ячейки в массиве значений 
             arrValues[i - 1] = '';
-            // Удаляем число из ячейки на странице и удаляем класс --active
+
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i})`).classList.remove('game__item--active');
          }
       }
    }
+   // Сдвиг значений вверх
    shiftValuesUp();
 }
 
@@ -283,9 +269,8 @@ function shiftValuesDown() {
             // Обнуляем значение ячейки со второй линии и записываем результат в массив значений
             arrValues[i - 1 - 3] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i - 3})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i - 3})`).classList.remove('game__item--active');
             
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -293,11 +278,7 @@ function shiftValuesDown() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 
@@ -320,9 +301,8 @@ function shiftValuesDown() {
             // Обнуляем значение ячейки со первой линии и записываем результат в массив значений
             arrValues[i - 1 - 3] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i - 3})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i - 3})`).classList.remove('game__item--active');
             
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -330,11 +310,7 @@ function shiftValuesDown() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 
@@ -349,7 +325,6 @@ function shiftValuesDown() {
          // Записываем значение ячейки в массив значений
          // Индекс уменьшаем на 1 для удобства, чтобы 1-ая ячейка была под №1, 2-ая под №2 и т.д.
          arrValues[i - 1] = gameItemValue;
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 }
@@ -370,19 +345,20 @@ function shiftRowsDown() {
          if (document.querySelector(`.game__item:nth-child(${i + 3})`).innerHTML === '') {
 
             // Записываем значение текущей ячейки в массив значений (на строку ниже)
-            arrValues[i - 1 + 3] = gameItemValue;            
-            // Записываем значение текущей ячейки в ячейку на строке ниже и добавляем класс --active
+            arrValues[i - 1 + 3] = gameItemValue;    
+
+            // Записываем значение текущей ячейки в ячейку на строке ниже
             document.querySelector(`.game__item:nth-child(${i + 3})`).innerHTML = gameItemValue;
-            document.querySelector(`.game__item:nth-child(${i + 3})`).classList.add('game__item--active');
 
             // Обнуляем значение текущей ячейки в массиве значений 
             arrValues[i - 1] = '';
-            // Удаляем число из ячейки на странице и удаляем класс --active
+
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i})`).classList.remove('game__item--active');
          }
       }
    }
+   // Сдвиг значений вниз
    shiftValuesDown();
 }
 
@@ -405,9 +381,8 @@ function shiftValuesLeft() {
             // Обнуляем значение ячейки со второго столбца и записываем результат в массив значений
             arrValues[i - 1 + 1] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i + 1})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i + 1})`).classList.remove('game__item--active');
 
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -415,9 +390,6 @@ function shiftValuesLeft() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
       }
    }
@@ -440,9 +412,8 @@ function shiftValuesLeft() {
             // Обнуляем значение ячейки с с трейтьего столбца и записываем результат в массив значений
             arrValues[i - 1 + 1] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i + 1})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i + 1})`).classList.remove('game__item--active');
 
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -450,9 +421,6 @@ function shiftValuesLeft() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
       }
    }  
@@ -468,7 +436,6 @@ function shiftValuesLeft() {
          // Записываем значение ячейки в массив значений
          // Индекс уменьшаем на 1 для удобства, чтобы 1-ая ячейка была под №1, 2-ая под №2 и т.д.
          arrValues[i - 1] = gameItemValue;
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 }
@@ -492,20 +459,21 @@ function shiftColumnsLeft() {
 
                // Записываем значение текущей ячейки в массив значений (на столбец левее)
                arrValues[i - 1 - 1] = gameItemValue;            
-               // Записываем значение текущей ячейки в ячейку на строке выше и добавляем класс --active
+
+               // Записываем значение текущей ячейки в ячейку на строке выше
                document.querySelector(`.game__item:nth-child(${i - 1})`).innerHTML = gameItemValue;
-               document.querySelector(`.game__item:nth-child(${i - 1})`).classList.add('game__item--active');
 
                // Обнуляем значение текущей ячейки в массиве значений 
                arrValues[i - 1] = '';
-               // Удаляем число из ячейки на странице и удаляем класс --active
+
+               // Скрываем ячейку со страницы
                document.querySelector(`.game__item:nth-child(${i})`).innerHTML = '';
-               document.querySelector(`.game__item:nth-child(${i})`).classList.remove('game__item--active');
             }
          }
          
       }
    }
+   // Сдвиг значений влево
    shiftValuesLeft();
 }
 
@@ -528,9 +496,8 @@ function shiftValuesRight() {
             // Обнуляем значение ячейки со второго столбца и записываем результат в массив значений
             arrValues[i - 1 - 1] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i - 1})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i - 1})`).classList.remove('game__item--active');
 
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -538,9 +505,6 @@ function shiftValuesRight() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
       }
    }
@@ -563,9 +527,8 @@ function shiftValuesRight() {
             // Обнуляем значение ячейки с первого столбца и записываем результат в массив значений
             arrValues[i - 1 - 1] = '';
 
-            // Удаляем число из ячейки на странице и удаляем класс --active
+            // Скрываем ячейку со страницы
             document.querySelector(`.game__item:nth-child(${i - 1})`).innerHTML = '';
-            document.querySelector(`.game__item:nth-child(${i - 1})`).classList.remove('game__item--active');
 
             // Умножаем значение ячейки в два раза
             gameItem.innerHTML *= 2;
@@ -573,9 +536,6 @@ function shiftValuesRight() {
             // Присваиваем получившееся значение в SCORE
             // При условии, что значение в получившейся ячейке больше значения предыдущего SCORE
             score = gameItem.innerHTML > score ? gameItem.innerHTML : score;
-
-            // Выводим значение SCORE в консолль для проверки
-            console.log('SCORE: ', score);
          }
       }
    }  
@@ -591,7 +551,6 @@ function shiftValuesRight() {
          // Записываем значение ячейки в массив значений
          // Индекс уменьшаем на 1 для удобства, чтобы 1-ая ячейка была под №1, 2-ая под №2 и т.д.
          arrValues[i - 1] = gameItemValue;
-         console.log(`Значение ${i}-й ячейки: `, arrValues[i - 1]);
       }
    }
 }
@@ -615,19 +574,20 @@ function shiftColumnsRight() {
 
                // Записываем значение текущей ячейки в массив значений (на столбец правее)
                arrValues[i - 1 + 1] = gameItemValue;            
-               // Записываем значение текущей ячейки в ячейку на строке выше и добавляем класс --active
+               
+               // Записываем значение текущей ячейки в ячейку на строке выше
                document.querySelector(`.game__item:nth-child(${i + 1})`).innerHTML = gameItemValue;
-               document.querySelector(`.game__item:nth-child(${i + 1})`).classList.add('game__item--active');
 
                // Обнуляем значение текущей ячейки в массиве значений 
                arrValues[i - 1] = '';
-               // Удаляем число из ячейки на странице и удаляем класс --active
+
+               // Скрываем ячейку со страницы
                document.querySelector(`.game__item:nth-child(${i})`).innerHTML = '';
-               document.querySelector(`.game__item:nth-child(${i})`).classList.remove('game__item--active');
             }
          }         
       }
    }
+   // Сдвиг значений направо
    shiftValuesRight();
 }
 
@@ -635,46 +595,71 @@ function paintingCell() {
    for (let i = 1; i <= 9; i++) {
       let gameItem = document.querySelector(`.game__item:nth-child(${i})`);
       switch(gameItem.innerHTML) {
+
+         // Пустая (неактивная) ячейка:
          case '':
             gameItem.style.backgroundColor = '#c8ecca';
             break;
+
+         // Ячейка со значением "2":
          case '2':
             gameItem.style.backgroundColor = '#5fd1a2';
             break;         
+
+         // Ячейка со значением "4":
          case '4':
             gameItem.style.backgroundColor = '#ebcccc';
             break;
+
+         // Ячейка со значением "8":
          case '8':
             gameItem.style.backgroundColor = '#cfacac';
             break;
+
+         // Ячейка со значением "16":
          case '16':
             gameItem.style.backgroundColor = '#b38989';
             break;
+
+         // Ячейка со значением "32":
          case '32':
             gameItem.style.backgroundColor = '#6e4c4c';
             break;
+
+         // Ячейка со значением "64":
          case '64':
             gameItem.style.backgroundColor = '#442c2c';
             break;
+
+         // Ячейка со значением "128":
          case '128':
             gameItem.style.backgroundColor = '#a1a3be';
             break;
+
+         // Ячейка со значением "256":
          case '256':
             gameItem.style.backgroundColor = '#70728f';
             break;
+
+         // Ячейка со значением "512":
          case '512':
             gameItem.style.backgroundColor = '#4f5170';
             break;
+
+         // Ячейка со значением "1024":
          case '1024':
             gameItem.style.backgroundColor = '#2a2b44';
             break;
-         case '2018':
+
+         // Ячейка со значением "2048":
+         case '2048':
             gameItem.style.backgroundColor = '#090a0f';
             break;
       }
    }  
 }
 
+// Генерация случайного числа в заданном диапазоне
 function getRandom(min, max) {
    return Math.floor(Math.random() * (max - min + 1) + min);
 }

@@ -1,13 +1,17 @@
 @import "_null";
 
+body {
+   width: 100%;
+   height: 100%;
+   background: #f2f1a4;
+}
 .wrapper {
    display: flex;
    justify-content: center;
    height: 100%;
    padding: 50px 0;
    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-   background: rgb(242,241,164);
-   background: linear-gradient(180deg, rgba(242,241,164,1) 0%, rgba(243,220,151,1) 100%);
+   background: linear-gradient(180deg, #f2f1a4 0%, #f3dc97 100%);
 }
 
 .hide {
@@ -19,6 +23,8 @@
 }
 
 .game {
+   display: flex;
+   justify-content: center;
 
    // .game__box
    &__box {
@@ -73,20 +79,26 @@
       justify-content: center;
       align-items: center;
       font-size: 50px;
-      &--active {
-         background: #5fd1a2;
+   }
+
+   // .game__rules
+   &__rules { 
+      width: 300px;
+      margin-left: 30px;
+      h2 {
+         align-self: center;
+         font-size: 30px;
+         font-weight: 700;
+         text-transform: uppercase;
       }
-      &--disable {
-         background: #c8ecca;
+      ul {
+         font-size: 24px;
+         margin-left: 24px;
+         margin-top: 20px;
       }
-      &--2 {
-         background: #5fd1a2;
-      }
-      &--4 {
-         background: #090a0f;
-      }
-      &--8 {
-         background: #ebcfc7;
+      li {         
+         margin-top: 10px;
+         list-style-type: disc;
       }
    }
 }
