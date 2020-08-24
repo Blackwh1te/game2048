@@ -2,6 +2,7 @@ let $start = document.querySelector('#start');
 let $gameField = document.querySelector('#game-field');
 let none = 'none';
 let flex = 'flex';
+let block = 'block';
 let score = 0;
 
 // Массив значений ячеек игрового поля:
@@ -85,11 +86,11 @@ function startGame() {
 }
 
 function endGameCheck() {
-   if (!cellValues.includes('')) {
+   if (cellValues.indexOf('') == -1) {
       if (false === isUpPossible === isDownPossible === isLeftPossible === isRightPossible) {
          // Скрытие кнопки "Начать" и отображение игрового поля:
-         display($start, block);
-         display($gameField, none);     
+         // display($start, block);
+         // display($gameField, none);     
       }
    }
 }
@@ -263,16 +264,20 @@ function shiftRight() {
 }
 
 function renderItem() {
-   while (true) {
-      // Генерация случайного номера ячейки игрового поля:
-      let cellNumber = getRandom(1, 9);
-      // Выбор ячейки игрового поля:      
-      let cell = getCell(cellNumber);
-      if (cell.innerHTML == '') {
-         fillTheCell(cell, cellNumber, 2);
-         appearanceAnimation(cell);
-         break;
+   if (cellValues.indexOf('') != -1) {
+      while (true) {
+         // Генерация случайного номера ячейки игрового поля:
+         let cellNumber = getRandom(1, 9);
+         // Выбор ячейки игрового поля:      
+         let cell = getCell(cellNumber);
+         if (cell.innerHTML == '') {
+            fillTheCell(cell, cellNumber, 2);
+            appearanceAnimation(cell);
+            break;
+         }
       }
+   } else {
+      console.log('GAME OVER!');
    }
 }
 
